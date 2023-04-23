@@ -1,2 +1,19 @@
-/*CSS button styling */
+.header {
+    display: flex;
+    background-color: lightblue;
+    color: black;
+    padding: 20px;
+    justify-content: center;
+}
 
+#search-city-input {
+    padding: 5px;
+}
+
+.search-button {
+    margin-bottom: 4px;
+}
+
+#search-history {
+    margin-top: 1%;
+}
