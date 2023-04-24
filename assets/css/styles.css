@@ -6,7 +6,7 @@
     justify-content: center;
 }
 
-#search-city-input {
+#city-input {
     padding: 5px;
 }
 
@@ -17,3 +17,4 @@
 #search-history {
     margin-top: 1%;
 }
+
