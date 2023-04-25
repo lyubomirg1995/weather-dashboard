@@ -1,10 +1,5 @@
 var APIKey = "68a6c3ea978b84aa2cc19e3a7396855c";
 var city = $('#city-input').val()
-var queryURL =
-  "http://api.openweathermap.org/data/2.5/weather?q=" +
-  city +
-  "&appid=" +
-  APIKey;
 var dateEl = $(".card-title");
 var tempEl = $("#temperature");
 var humEl = $("#humidity");
@@ -18,7 +13,13 @@ var futureEl = $("#future-forecast");
  
 
 function getWeatherData() {
-   city = $('#city-input').val()
+  city = $('#city-input').val()
+  var queryURL =
+  "http://api.openweathermap.org/data/2.5/weather?q=" +
+  city +
+  "&appid=" +
+  APIKey;
+  // var geoAPIUrl = "http://api.openweathermap.org/geo/1.0/direct?q=" + city + "&limit=1" + "&appid=" + APIKey
   fetch(queryURL).then(function (response) {
     console.log(response);
     if (response.ok) {
