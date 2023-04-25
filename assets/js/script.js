@@ -13,24 +13,25 @@ var futureEl = $("#future-forecast");
 var searchButton = $('#search-city');
  
 
-function getWeatherData() {
-  city = $('#city-input').val()
-  var queryURL =
-  "http://api.openweathermap.org/data/2.5/weather?q=" +
-  city +
-  "&appid=" +
-  APIKey;
-  // var geoAPIUrl = "http://api.openweathermap.org/geo/1.0/direct?q=" + city + "&limit=1" + "&appid=" + APIKey
-  fetch(queryURL).then(function (response) {
-    console.log(response);
-    if (response.ok) {
-      response.json().then(function (data) {
-        console.log(data);
-      });
-    } else {
-      alert("Error: " + response.statusText);
-    }
-  });
-}
+function getWeatherData(event) {
+  city = $("#city-input").val();
+  //console commands provide essential data collection for further functions
+    console.log("City ", city);
+    var queryURL =
+    "http://api.openweathermap.org/data/2.5/weather?q=" +
+    city +
+    "&appid=" +
+    APIKey;
+    console.log("Query ", queryURL);
 
+  fetch(queryURL)
+    .then((response) => response.json()) // implied return was missing, switched to arrow functions
+    .then((result) => {
+      console.log("Data ", result);
+      return result; // stops function from executing indefinitely 
+    });
+    //prevents input (and therefore its output) from disappearing after submitting result
+    event.preventDefault();
+  }
+      
 $('#search-city').on('click', getWeatherData);
