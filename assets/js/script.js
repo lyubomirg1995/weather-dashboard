@@ -20,7 +20,7 @@ function getWeatherData(event) {
    city = $("#city-input").val();
   
   getCurrentWeatherData(city);
-  getFiveDayForecastData(lat, lon);
+  
   }
       
   function getCurrentWeatherData(city) {
@@ -43,6 +43,24 @@ function getWeatherData(event) {
     //unix and date variables moved out of global scope to 2nd then block to avoid undefined result variable
     var unixTimeStamp = result.dt
     var date = new Date(unixTimeStamp * 1000);
+    
+  function getFiveDayForecastData(lat, lon) {
+
+    var lat = result.coord.lat;
+    var lon = result.coord.lon;
+    
+      var fiveDayApiUrl = "http://api.openweathermap.org/data/2.5/forecast?" + "units=imperial" + "&lat=" + lat + "&lon=" + lon + "&appid=" + APIKey;
+      console.log("Future Query ", fiveDayApiUrl);
+      
+      fetch(fiveDayApiUrl).then((responseFuture) => responseFuture.json())
+        .then(resultFuture => {
+        console.log("Future Data ", resultFuture);
+  
+        return resultFuture;
+      });
+      
+    }
+ 
 
     dataOutput.css('display', 'block');
       dateEl.text(city + ", " + date.toLocaleDateString("en-US"));
@@ -56,19 +74,6 @@ function getWeatherData(event) {
   
   
     
-  function getFiveDayForecastData(lat, lon) {
-    var lat = result.coord.lat;
-    var lon = result.coord.lon;
-    var fiveDayApiUrl = "http://api.openweathermap.org/data/2.5/forecast?" + "units=imperial" + "&lat=" + lat + "&lon=" + lon + "&appid=" + APIKey;
-    console.log("Future Query ", fiveDayApiUrl);
-    
-    fetch(fiveDayApiUrl).then((responseFuture) => responseFuture.json())
-      .then(resultFuture => {
-      console.log("Future Data ", resultFuture);
-
-      return resultFuture;
-    });
-    
-  }
+  
           
 $('#search-city').on('click', getWeatherData);
