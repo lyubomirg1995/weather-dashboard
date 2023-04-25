@@ -10,6 +10,7 @@ var dataOutput = $("#weather-card");
 var clearHistory = $("#clear-history");
 var historyContainer = $("#search-history-container");
 var futureEl = $("#future-forecast");
+var searchButton = $('#search-city');
  
 
 function getWeatherData() {
@@ -31,3 +32,5 @@ function getWeatherData() {
     }
   });
 }
+
+$('#search-city').on('click', getWeatherData);
