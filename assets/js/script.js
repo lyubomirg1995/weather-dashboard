@@ -12,10 +12,19 @@ var historyContainer = $("#search-history-container");
 var futureEl = $("#future-forecast");
 var searchButton = $('#search-city');
 var today = dayjs().format('M-D-YYYY');
+
  
 
 function getWeatherData(event) {
-  city = $("#city-input").val();
+  event.preventDefault();
+   city = $("#city-input").val();
+  
+  getCurrentWeatherData(city);
+  getFiveDayForecastData(lat, lon);
+  }
+      
+  function getCurrentWeatherData(city) {
+   
   //console commands provide essential data collection for further feature implementation
     console.log("City ", city);
     var queryURL =
@@ -25,28 +34,41 @@ function getWeatherData(event) {
     "&appid=" +
     APIKey;
     console.log("Query ", queryURL);
-
-
+    
   fetch(queryURL)
-    .then((response) => response.json()) // implied return was missing, switched to arrow functions
+    .then((response) => response.json())
     .then((result) => {
-      console.log("Data ", result);
-      //converts unix dt to human readable time
-      var unixTimeStamp = result.dt
-      var date = new Date(unixTimeStamp * 1000);
-      //dynamically generates text content to premade HTML card
-      dataOutput.css('display', 'block');
-      dateEl.text(date.toLocaleDateString("en-US"));
+    console.log("Data ", result);
+    //converts unix dt to human readable time
+    //unix and date variables moved out of global scope to 2nd then block to avoid undefined result variable
+    var unixTimeStamp = result.dt
+    var date = new Date(unixTimeStamp * 1000);
+
+    dataOutput.css('display', 'block');
+      dateEl.text(city + ", " + date.toLocaleDateString("en-US"));
       tempEl.text("Temperature: " + result.main.temp + "°F" );
       windEl.text("Wind: " + result.wind.speed + " MPH");
       humEl.text("Humidity: " + result.main.humidity + "%");
 
-      
       return result; // stops function from executing indefinitely (was missing)
     });
+  };
   
-    //prevents input (and therefore its output) from disappearing after clicking the search button (was missing)
-    event.preventDefault();
+  
+    
+  function getFiveDayForecastData(lat, lon) {
+    var lat = result.coord.lat;
+    var lon = result.coord.lon;
+    var fiveDayApiUrl = "http://api.openweathermap.org/data/2.5/forecast?" + "units=imperial" + "&lat=" + lat + "&lon=" + lon + "&appid=" + APIKey;
+    console.log("Future Query ", fiveDayApiUrl);
+    
+    fetch(fiveDayApiUrl).then((responseFuture) => responseFuture.json())
+      .then(resultFuture => {
+      console.log("Future Data ", resultFuture);
+
+      return resultFuture;
+    });
+    
   }
-      
+          
 $('#search-city').on('click', getWeatherData);
