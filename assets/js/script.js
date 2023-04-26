@@ -77,30 +77,27 @@ function getCurrentWeatherData(city) {
               futureCardEl.addClass('card');
               futureEl.append(futureCardEl);
 
-              var futureCardBodyEl = $('<div>/<div>').addClass('card-body');
+              var futureCardBodyEl = $('<div></div>').addClass('card-body');
               futureCardEl.append(futureCardBodyEl);
 
               var futureCardTitleEl = $('<h5></h5>').addClass('card-title');
-              futureCardTitleEl.attr("id", "title-element");
               futureCardTitleEl.text(futureReadableData);
               futureCardBodyEl.append(futureCardTitleEl);
 
               var futureTempEl = $('<p>' + "Temperature: " + arrayData.main.temp + "°F" + '</p>')
-              futureTempEl.attr("id","temperature-element");
-              futureCardBodyEl.addClass('card-text');
-              futureTempEl.insertAfter('#title-element');
+              futureTempEl.addClass('card-text');
+              futureCardBodyEl.append(futureTempEl);
+              
 
               var futureWindEl = $('<p>' + "Wind: " + arrayData.wind.speed + "MPH" + '</p>');
-              futureWindEl.attr("id", "wind-element");
               futureWindEl.addClass('card-text');
-              futureWindEl.insertAfter('#temperature-element');
+              futureCardBodyEl.append(futureWindEl);
+              
 
               var futureHumidityEl = $('<p>' + "Humidity: " + arrayData.main.humidity + "%" + '</p>');
-              futureHumidityEl.attr("id", "humidity-element");
               futureHumidityEl.addClass('card-text');
-              futureHumidityEl.insertAfter("#wind-element");
-
-
+              futureCardBodyEl.append(futureHumidityEl);
+            
 
             } 
 
