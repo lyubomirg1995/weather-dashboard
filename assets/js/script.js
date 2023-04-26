@@ -61,6 +61,10 @@ function getCurrentWeatherData(city) {
           .then((resultFuture) => {
             console.log("Future Data ", resultFuture);
             var fiveDayForecast = [];
+            $('#future-title').text("5-Day Forecast").css('margin-top', '5%');
+
+            futureEl.empty(); // prevents new forecast data from appending to old forecast data
+
 
             for (var i = 0; i < resultFuture.list.length; i += 8) {
               
@@ -110,6 +114,15 @@ function getCurrentWeatherData(city) {
       tempEl.text("Temperature: " + result.main.temp + "°F");
       windEl.text("Wind: " + result.wind.speed + " MPH");
       humEl.text("Humidity: " + result.main.humidity + "%");
+
+      var searchHistoryList = $('<li></li>');
+      searchHistoryList.css('list-style', 'none');
+      var searchHistoryBtn = $('<button></button>');
+      searchHistoryBtn.text(city);
+      searchHistoryList.append(searchHistoryBtn);
+      historyContainer.append(searchHistoryList);
+
+
 
       return result; // stops function from executing indefinitely (was missing)
     });
