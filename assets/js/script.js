@@ -43,12 +43,13 @@ function getWeatherData(event) {
     //unix and date variables moved out of global scope to 2nd then block to avoid undefined result variable
     var unixTimeStamp = result.dt
     var date = new Date(unixTimeStamp * 1000);
-    
-  function getFiveDayForecastData(lat, lon) {
-
     var lat = result.coord.lat;
     var lon = result.coord.lon;
+    getFiveDayForecastData(lat,lon);
+    function getFiveDayForecastData(lat, lon) {
     
+   
+
       var fiveDayApiUrl = "http://api.openweathermap.org/data/2.5/forecast?" + "units=imperial" + "&lat=" + lat + "&lon=" + lon + "&appid=" + APIKey;
       console.log("Future Query ", fiveDayApiUrl);
       
