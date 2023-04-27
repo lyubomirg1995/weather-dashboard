@@ -41,6 +41,9 @@ function getCurrentWeatherData(city) {
       var date = new Date(unixTimeStamp * 1000);
       var lat = result.coord.lat;
       var lon = result.coord.lon;
+      var iconCode = result.weather[0].icon
+      var iconUrl = "http://openweathermap.org/img/w/" + iconCode + ".png"
+      var iconDisplay = $('#wicon').attr('src', iconUrl);
 
       getFiveDayForecastData(lat, lon);
 
@@ -61,78 +64,88 @@ function getCurrentWeatherData(city) {
           .then((resultFuture) => {
             console.log("Future Data ", resultFuture);
             var fiveDayForecast = [];
-            $('#future-title').text("5-Day Forecast").css('margin-top', '5%');
+            $("#future-title").text("5-Day Forecast").css("margin-top", "5%");
 
             futureEl.empty(); // prevents new forecast data from appending to old forecast data
 
-
-            for (var i = 0; i < resultFuture.list.length; i += 8) {
-              
-              
+            for (var i = 8; i < resultFuture.list.length; i += 7) {
               var arrayData = resultFuture.list[i];
               fiveDayForecast.push(arrayData);
-              
-              var futureUnixTimeStamp = arrayData.dt
+
+              var futureUnixTimeStamp = arrayData.dt;
               var futureDate = new Date(futureUnixTimeStamp * 1000);
               var futureReadableData = futureDate.toLocaleDateString("en-US");
+
+              var futureCardEl = $("<div></div>").attr("id", "future-card");
+              futureCardEl.addClass("card");
+              futureEl.append(futureCardEl);
               
 
-              var futureCardEl = $('<div></div>').attr("id", "future-card");
-              futureCardEl.addClass('card');
-              futureEl.append(futureCardEl);
-
-              var futureCardBodyEl = $('<div></div>').addClass('card-body');
+              var futureCardBodyEl = $("<div></div>").addClass("card-body");
               futureCardEl.append(futureCardBodyEl);
 
-              var futureCardTitleEl = $('<h5></h5>').addClass('card-title');
-              futureCardTitleEl.text(futureReadableData);
+              var futureIconCode = resultFuture.list[i].weather[0].icon;
+              var futureIconUrl = "http://openweathermap.org/img/w/" + futureIconCode + ".png";
+              var futureIconDisplay = $("<img>").attr('src', futureIconUrl);
+
+              var futureCardTitleEl = $("<h5></h5>").addClass("card-title");
+              futureCardTitleEl.text(futureReadableData + " ");
+              futureCardTitleEl.append(futureIconDisplay);
               futureCardBodyEl.append(futureCardTitleEl);
 
-              var futureTempEl = $('<p>' + "Temperature: " + arrayData.main.temp + "°F" + '</p>')
-              futureTempEl.addClass('card-text');
+              
+
+
+
+              var futureTempEl = $(
+                "<p>" + "Temperature: " + arrayData.main.temp + "°F" + "</p>"
+              );
+              futureTempEl.addClass("card-text");
               futureCardBodyEl.append(futureTempEl);
-              
 
-              var futureWindEl = $('<p>' + "Wind: " + arrayData.wind.speed + "MPH" + '</p>');
-              futureWindEl.addClass('card-text');
+              var futureWindEl = $(
+                "<p>" + "Wind: " + arrayData.wind.speed + "MPH" + "</p>"
+              );
+              futureWindEl.addClass("card-text");
               futureCardBodyEl.append(futureWindEl);
-              
 
-              var futureHumidityEl = $('<p>' + "Humidity: " + arrayData.main.humidity + "%" + '</p>');
-              futureHumidityEl.addClass('card-text');
+              var futureHumidityEl = $(
+                "<p>" + "Humidity: " + arrayData.main.humidity + "%" + "</p>"
+              );
+              futureHumidityEl.addClass("card-text");
               futureCardBodyEl.append(futureHumidityEl);
-            
-
-            } 
+            }
 
             return resultFuture;
           });
       }
 
       dataOutput.css("display", "block");
-      dateEl.text(city + ", " + date.toLocaleDateString("en-US"));
+      dateEl.text(city + ", " + date.toLocaleDateString("en-US") + " ");
+      dateEl.append(iconDisplay);
       tempEl.text("Temperature: " + result.main.temp + "°F");
       windEl.text("Wind: " + result.wind.speed + " MPH");
       humEl.text("Humidity: " + result.main.humidity + "%");
 
-      var searchHistoryArray= JSON.parse(localStorage.getItem('searchHistory')) || [];
+      var searchHistoryArray =
+        JSON.parse(localStorage.getItem("searchHistory")) || [];
 
-      if(!searchHistoryArray.includes(city)) {
-        
+      if (!searchHistoryArray.includes(city)) {
         searchHistoryArray.push(city);
-        localStorage.setItem('searchHistory', JSON.stringify(searchHistoryArray));
+        localStorage.setItem(
+          "searchHistory",
+          JSON.stringify(searchHistoryArray)
+        );
 
-        var searchHistoryList = $('<li></li>');
-        searchHistoryList.css('list-style', 'none');
-        searchHistoryList.addClass('history-list')
-        var searchHistoryBtn = $('<button></button>');
+        var searchHistoryList = $("<li></li>");
+        searchHistoryList.css("list-style", "none");
+        searchHistoryList.addClass("history-list");
+        var searchHistoryBtn = $("<button></button>");
         searchHistoryBtn.text(city);
-        searchHistoryBtn.addClass('search-history-btn');
-        searchHistoryBtn.attr('data-city', city);
+        searchHistoryBtn.addClass("search-history-btn");
+        searchHistoryBtn.attr("data-city", city);
         searchHistoryList.append(searchHistoryBtn);
         historyContainer.append(searchHistoryList);
-
-      
       }
       return result; // stops function from executing indefinitely (was missing)
     });
@@ -140,39 +153,36 @@ function getCurrentWeatherData(city) {
 
 $("#search-city").on("click", getWeatherData);
 
-  function retrieveStoredHistory() {
-  var searchHistoryArray= JSON.parse(localStorage.getItem('searchHistory')) || [];
+function retrieveStoredHistory() {
+  var searchHistoryArray =
+    JSON.parse(localStorage.getItem("searchHistory")) || [];
 
-  
   for (var i = 0; i < searchHistoryArray.length; i++) {
-    var searchHistoryList = $('<li></li>');
-    searchHistoryList.css('list-style', 'none');
-    searchHistoryList.addClass('history-list');
-    var searchHistoryBtn =  $('<button></button>');
+    var searchHistoryList = $("<li></li>");
+    searchHistoryList.css("list-style", "none");
+    searchHistoryList.addClass("history-list");
+    var searchHistoryBtn = $("<button></button>");
     searchHistoryBtn.text(searchHistoryArray[i]);
-    searchHistoryBtn.addClass('search-history-btn');
-    searchHistoryBtn.attr('data-city', searchHistoryArray[i]);
+    searchHistoryBtn.addClass("search-history-btn");
+    searchHistoryBtn.attr("data-city", searchHistoryArray[i]);
     searchHistoryList.append(searchHistoryBtn);
     historyContainer.append(searchHistoryList);
   }
 }
 
 retrieveStoredHistory();
-  
-$('#search-history-container').on("click", function(event) {
+
+$("#search-history-container").on("click", function (event) {
   event.preventDefault();
-  var clickedButton = event.target
+  var clickedButton = event.target;
 
-  if ($(clickedButton).hasClass('search-history-btn')) {
-      city = $(clickedButton).data('city');
-      getCurrentWeatherData(city);
-  };
+  if ($(clickedButton).hasClass("search-history-btn")) {
+    city = $(clickedButton).data("city");
+    getCurrentWeatherData(city);
+  }
+});
 
-  
-})
-
-$("#clear-history").on("click", function() {
-  localStorage.removeItem("searchHistory")
-  $('#search-history-container').empty();
-})
-
+$("#clear-history").on("click", function () {
+  localStorage.removeItem("searchHistory");
+  $("#search-history-container").empty();
+});
