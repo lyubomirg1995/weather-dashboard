@@ -115,17 +115,64 @@ function getCurrentWeatherData(city) {
       windEl.text("Wind: " + result.wind.speed + " MPH");
       humEl.text("Humidity: " + result.main.humidity + "%");
 
-      var searchHistoryList = $('<li></li>');
-      searchHistoryList.css('list-style', 'none');
-      var searchHistoryBtn = $('<button></button>');
-      searchHistoryBtn.text(city);
-      searchHistoryList.append(searchHistoryBtn);
-      historyContainer.append(searchHistoryList);
+      var searchHistoryArray= JSON.parse(localStorage.getItem('searchHistory')) || [];
 
+      if(!searchHistoryArray.includes(city)) {
+        
+        searchHistoryArray.push(city);
+        localStorage.setItem('searchHistory', JSON.stringify(searchHistoryArray));
 
+        var searchHistoryList = $('<li></li>');
+        searchHistoryList.css('list-style', 'none');
+        searchHistoryList.addClass('history-list')
+        var searchHistoryBtn = $('<button></button>');
+        searchHistoryBtn.text(city);
+        searchHistoryBtn.addClass('search-history-btn');
+        searchHistoryBtn.attr('data-city', city);
+        searchHistoryList.append(searchHistoryBtn);
+        historyContainer.append(searchHistoryList);
 
+      
+      }
       return result; // stops function from executing indefinitely (was missing)
     });
 }
 
 $("#search-city").on("click", getWeatherData);
+
+  function retrieveStoredHistory() {
+  var searchHistoryArray= JSON.parse(localStorage.getItem('searchHistory')) || [];
+
+  
+  for (var i = 0; i < searchHistoryArray.length; i++) {
+    var searchHistoryList = $('<li></li>');
+    searchHistoryList.css('list-style', 'none');
+    searchHistoryList.addClass('history-list');
+    var searchHistoryBtn =  $('<button></button>');
+    searchHistoryBtn.text(searchHistoryArray[i]);
+    searchHistoryBtn.addClass('search-history-btn');
+    searchHistoryBtn.attr('data-city', searchHistoryArray[i]);
+    searchHistoryList.append(searchHistoryBtn);
+    historyContainer.append(searchHistoryList);
+  }
+}
+
+retrieveStoredHistory();
+  
+$('#search-history-container').on("click", function(event) {
+  event.preventDefault();
+  var clickedButton = event.target
+
+  if ($(clickedButton).hasClass('search-history-btn')) {
+      city = $(clickedButton).data('city');
+      getCurrentWeatherData(city);
+  };
+
+  
+})
+
+$("#clear-history").on("click", function() {
+  localStorage.removeItem("searchHistory")
+  $('#search-history-container').empty();
+})
+
