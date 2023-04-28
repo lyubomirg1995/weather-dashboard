@@ -45,14 +45,14 @@ function getCurrentWeatherData(city) {
       var lat = result.coord.lat;
       var lon = result.coord.lon;
       var iconCode = result.weather[0].icon
-      var iconUrl = "http://openweathermap.org/img/w/" + iconCode + ".png"
+      var iconUrl = "https://openweathermap.org/img/w/" + iconCode + ".png"
       var iconDisplay = $('#wicon').attr('src', iconUrl);
 
       getFiveDayForecastData(lat, lon);
 //imperial units needed for Fahrenheit value, lat and lon needed for 5-day forecast
       function getFiveDayForecastData(lat, lon) {
         var fiveDayApiUrl =
-          "http://api.openweathermap.org/data/2.5/forecast?" +
+          "https://api.openweathermap.org/data/2.5/forecast?" +
           "units=imperial" +
           "&lat=" +
           lat +
