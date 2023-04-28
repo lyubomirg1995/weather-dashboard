@@ -90,7 +90,7 @@ function getCurrentWeatherData(city) {
               futureCardEl.append(futureCardBodyEl);
 
               var futureIconCode = resultFuture.list[i].weather[0].icon;
-              var futureIconUrl = "http://openweathermap.org/img/w/" + futureIconCode + ".png";
+              var futureIconUrl = "https://openweathermap.org/img/w/" + futureIconCode + ".png";
               var futureIconDisplay = $("<img>").attr('src', futureIconUrl);
 
               var futureCardTitleEl = $("<h5></h5>").addClass("card-title");
