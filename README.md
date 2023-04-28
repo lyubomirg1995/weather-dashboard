@@ -37,6 +37,8 @@ Display current + future weather data from search history, lines 188-191: GTP-4 
 
 Clear history, lines 193-197: GTP-4 (direct code solution);
 
+5-day forecast bootstrap layout: Sean McCarthy (Teacher's Assitant), Joshua Bohde (Instructor)
+
 
 
 
